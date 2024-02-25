@@ -2,15 +2,14 @@ pragma solidity =0.5.16;
 
 import "./interfaces/IMonoswapV2Factory.sol";
 import "./MonoswapV2Pair.sol";
+import "./abstract/BlastConfigure.sol";
+import "./interfaces/IBlast.sol";
 
-contract MonoswapV2Factory is IMonoswapV2Factory {
+contract MonoswapV2Factory is IMonoswapV2Factory, BlastConfigure {
     bytes32 public constant INIT_CODE_POOL_HASH =
         keccak256(abi.encodePacked(type(MonoswapV2Pair).creationCode));
     address public feeTo;
     address public feeToSetter;
-
-    address public constant USDB = 0x4200000000000000000000000000000000000022;
-    address public constant WETH = 0x4200000000000000000000000000000000000023;
 
     mapping(address => mapping(address => address)) public getPair;
     address[] public allPairs;
@@ -23,8 +22,15 @@ contract MonoswapV2Factory is IMonoswapV2Factory {
         uint
     );
 
-    constructor(address _feeToSetter) public {
+    constructor(
+        address _feeToSetter,         
+        address _blast,
+        address _blastPoints,
+        address _usdb,
+        address _weth,
+        address _operator)public {
         feeToSetter = _feeToSetter;
+        initializeBlastConfig(_blast, _blastPoints, _usdb, _weth, _operator);
     }
 
     function allPairsLength() external view returns (uint) {
@@ -49,11 +55,19 @@ contract MonoswapV2Factory is IMonoswapV2Factory {
         assembly {
             pair := create2(0, add(bytecode, 32), mload(bytecode), salt)
         }
-        IMonoswapV2Pair(pair).initialize(token0, token1);
+        IMonoswapV2Pair(pair).initialize(
+            token0, 
+            token1,
+            blast,
+            blastPoints,
+            usdb,
+            weth,
+            operator
+            );
         getPair[token0][token1] = pair;
         getPair[token1][token0] = pair; // populate mapping in the reverse direction
         allPairs.push(pair);
-        if (token0 == USDB || token1 == USDB) {
+        if (token0 == address(usdb) || token1 == address(usdb) || token0 == address(weth) || token1 == address(weth)) {
             rebasingPairs.push(pair);
         }
 
@@ -68,19 +82,6 @@ contract MonoswapV2Factory is IMonoswapV2Factory {
     function setFeeToSetter(address _feeToSetter) external {
         require(msg.sender == feeToSetter, "MONOSWAPV2: FORBIDDEN");
         feeToSetter = _feeToSetter;
-    }
-
-    function claimYield(uint256 offset, uint256 length) external {
-        if (offset > rebasingPairs.length) {
-            return;
-        }
-        uint256 end = offset + length;
-        if (end > rebasingPairs.length) {
-            end = rebasingPairs.length;
-        }
-        for (uint256 i = offset; i < end; i++) {
-            IMonoswapV2Pair(rebasingPairs[i]).claimYield();
-        }
     }
 
     function getPairs(
@@ -117,5 +118,36 @@ contract MonoswapV2Factory is IMonoswapV2Factory {
             pairs[i - offset] = rebasingPairs[i];
         }
         return pairs;
+    }
+
+    function claimGas(uint256 offset, uint256 length, address receipient) external {
+        if (offset > allPairs.length) {
+            return;
+        }
+        uint256 end = offset + length;
+        if (end > allPairs.length) {
+            end = allPairs.length;
+        }
+        for (uint256 i = offset; i < end; i++) {
+            IBlast(blast).claimMaxGas(allPairs[i], receipient);
+        }
+    }
+
+    function claimPairsYield(
+        uint256 offset,
+        uint256 length,
+        address receipient
+    ) external {
+        if (offset > allPairs.length) {
+            return;
+        }
+        uint256 end = offset + length;
+        if (end > allPairs.length) {
+            end = allPairs.length;
+        }
+        for (uint256 i = offset; i < end; i++) {
+            IMonoswapV2Pair(allPairs[i]).claimYield(receipient);
+        }
+    
     }
 }

@@ -1,0 +1,212 @@
+{
+	"compiler": {
+		"version": "0.5.16+commit.9c3226ce"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [
+			{
+				"inputs": [],
+				"payable": false,
+				"stateMutability": "nonpayable",
+				"type": "constructor"
+			},
+			{
+				"constant": true,
+				"inputs": [],
+				"name": "blast",
+				"outputs": [
+					{
+						"internalType": "contract IBlast",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"payable": false,
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"constant": true,
+				"inputs": [],
+				"name": "blastPoints",
+				"outputs": [
+					{
+						"internalType": "contract IBlastPoints",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"payable": false,
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"constant": false,
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "recipientOfYield",
+						"type": "address"
+					}
+				],
+				"name": "claimYield",
+				"outputs": [],
+				"payable": false,
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"constant": false,
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "_blast",
+						"type": "address"
+					},
+					{
+						"internalType": "address",
+						"name": "_blastPoints",
+						"type": "address"
+					},
+					{
+						"internalType": "address",
+						"name": "_usdb",
+						"type": "address"
+					},
+					{
+						"internalType": "address",
+						"name": "_weth",
+						"type": "address"
+					},
+					{
+						"internalType": "address",
+						"name": "_operator",
+						"type": "address"
+					}
+				],
+				"name": "initializeBlastConfig",
+				"outputs": [],
+				"payable": false,
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"constant": true,
+				"inputs": [],
+				"name": "operator",
+				"outputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"payable": false,
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"constant": false,
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "_operator",
+						"type": "address"
+					}
+				],
+				"name": "setOperator",
+				"outputs": [],
+				"payable": false,
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"constant": true,
+				"inputs": [],
+				"name": "usdb",
+				"outputs": [
+					{
+						"internalType": "contract IERC20Rebasing",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"payable": false,
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"constant": true,
+				"inputs": [],
+				"name": "weth",
+				"outputs": [
+					{
+						"internalType": "contract IERC20Rebasing",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"payable": false,
+				"stateMutability": "view",
+				"type": "function"
+			}
+		],
+		"devdoc": {
+			"methods": {}
+		},
+		"userdoc": {
+			"methods": {}
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"contracts/abstract/BlastConfigure.sol": "BlastConfigure"
+		},
+		"evmVersion": "istanbul",
+		"libraries": {},
+		"optimizer": {
+			"enabled": false,
+			"runs": 200
+		},
+		"remappings": []
+	},
+	"sources": {
+		"contracts/abstract/BlastConfigure.sol": {
+			"keccak256": "0x6774a0467fe45ff73e02692a1daf166416db5ab54a4ff2af002d08264bba1ae6",
+			"urls": [
+				"bzz-raw://501b6c839256b3dba3219d6116632be17b70035e3d4db571e531b7e83a680612",
+				"dweb:/ipfs/QmWANsnDw1kDBZAnvmBbuJvEX7acayWyfJ3WnamVg9YFAo"
+			]
+		},
+		"contracts/interfaces/IBlast.sol": {
+			"keccak256": "0xe53ad318ad8ded1e6c88d56f02545576ee475e9204e130a0cfd9e6c7e17a144d",
+			"urls": [
+				"bzz-raw://bb1d05d7636dc5f837c44a5847afdbcaddf9ab2013c15fa7cf19dacd4860bc4b",
+				"dweb:/ipfs/QmfQF6tASo29qZdWKdjTv9vV3ZMrB82n6aaLWTxT9JCGrT"
+			]
+		},
+		"contracts/interfaces/IBlastConfigure.sol": {
+			"keccak256": "0x16e1cbc6bb66169cb4d4b1d81fc382aa23262c5b2a99ec565ea95e28ba78bb9c",
+			"urls": [
+				"bzz-raw://b7aabcad4335f40b14adbda953c429cf5064cd0a53e0506d11ab0afe3a2a6413",
+				"dweb:/ipfs/QmQR7XxLmGYWdDgdfsU29dfCZ7WmwYctg6jxxQDza36gtZ"
+			]
+		},
+		"contracts/interfaces/IBlastPoints.sol": {
+			"keccak256": "0xc2202b42846e768d975f436c5143de47624fa9221f88a825521d91bd7d0e060c",
+			"urls": [
+				"bzz-raw://9df1d5be2eea396a834eba7d36854996eb74493fb0b14c1b0892a14c43e61793",
+				"dweb:/ipfs/QmfHu41CecgSp9nY3aM3jscp4cetwwg8KNyG1wtxqJ61EF"
+			]
+		},
+		"contracts/interfaces/IERC20Rebasing.sol": {
+			"keccak256": "0x61f3798fbbf85e76e39f831b6199b8d1e035ea9d0a775135b5ea7e7a829db66c",
+			"urls": [
+				"bzz-raw://c9418ef7f191b949647c9baa98d6cb609f599e287d9a5cdc3f56cf7cdef1fff6",
+				"dweb:/ipfs/QmTJNJuFukUxCQ3VfW8TBsVUDRnxEtrZs74iSecSyb27yP"
+			]
+		}
+	},
+	"version": 1
+}

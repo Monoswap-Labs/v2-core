@@ -4,7 +4,15 @@ import * as dotenv from 'dotenv';
 dotenv.config();
 
 const config: HardhatUserConfig = {
-  solidity: '0.5.16',
+  solidity: {
+    version: '0.5.16',
+    settings: {
+      optimizer: {
+        enabled: true,
+        runs: 1,
+      },
+    },
+  },
   networks: {
     ganache: {
       url: 'http://localhost:8545',
@@ -33,7 +41,7 @@ const config: HardhatUserConfig = {
     blastSepolia: {
       url: 'https://sepolia.blast.io',
       accounts: [process.env.BLAST_SEPOLIA_PRIVATE_KEY || ''],
-      gasPrice: 1000000000,
+      gasPrice: 3000000000,
     },
   },
   etherscan: {
