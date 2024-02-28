@@ -1,3 +1,4 @@
+/// SPDX-License-Identifier: MIT
 pragma solidity >=0.5.0;
 
 interface IMonoswapV2Pair {
@@ -96,6 +97,13 @@ interface IMonoswapV2Pair {
 
     function sync() external;
 
-    function initialize(address, address) external;
-    function claimYield() external;
+    function initialize(        
+        address _token0, 
+        address _token1,
+        address _blast,
+        address _blastPoints,
+        address _usdb,
+        address _weth,
+        address _operator) external;
+    function claimYield(address receipient) external;
 }

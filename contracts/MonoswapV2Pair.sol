@@ -8,6 +8,8 @@ import "./interfaces/IERC20.sol";
 import "./interfaces/IMonoswapV2Factory.sol";
 import "./interfaces/IMonoswapV2Callee.sol";
 import "./interfaces/IERC20Rebasing.sol";
+import "./interfaces/IBlast.sol";
+import "./interfaces/IBlastPoints.sol";
 
 contract MonoswapV2Pair is IMonoswapV2Pair, MonoswapV2ERC20 {
     using SafeMath for uint;
@@ -17,10 +19,10 @@ contract MonoswapV2Pair is IMonoswapV2Pair, MonoswapV2ERC20 {
     bytes4 private constant SELECTOR =
         bytes4(keccak256(bytes("transfer(address,uint256)")));
 
-    IERC20Rebasing public constant USDB =
-        IERC20Rebasing(0x4200000000000000000000000000000000000022);
-    IERC20Rebasing public constant WETH =
-        IERC20Rebasing(0x4200000000000000000000000000000000000023);
+    IERC20Rebasing public usdb;
+    IERC20Rebasing public weth;
+    IBlast public blast;
+    IBlastPoints public blastPoints;
 
     address public factory;
     address public token0;
@@ -85,15 +87,34 @@ contract MonoswapV2Pair is IMonoswapV2Pair, MonoswapV2ERC20 {
 
     constructor() public {
         factory = msg.sender;
-        USDB.configure(IERC20Rebasing.YieldMode.CLAIMABLE);
-        WETH.configure(IERC20Rebasing.YieldMode.CLAIMABLE);
+
     }
 
     // called once by the factory at time of deployment
-    function initialize(address _token0, address _token1) external {
+    function initialize(
+        address _token0, 
+        address _token1,
+        address _blast,
+        address _blastPoints,
+        address _usdb,
+        address _weth,
+        address _operator
+        ) external {
         require(msg.sender == factory, "MONOSWAPV2: FORBIDDEN"); // sufficient check
         token0 = _token0;
         token1 = _token1;
+
+        usdb = IERC20Rebasing(_usdb);
+        weth = IERC20Rebasing(_weth);
+        blast = IBlast(_blast);
+        blastPoints = IBlastPoints(_blastPoints);
+        
+        usdb.configure(IERC20Rebasing.YieldMode.CLAIMABLE);
+        weth.configure(IERC20Rebasing.YieldMode.CLAIMABLE);
+        blast.configureClaimableYield();
+        blast.configureClaimableGas();
+        blastPoints.configurePointsOperator(_operator);
+        blast.configureGovernor(factory);
     }
 
     // update reserves and, on the first call per block, price accumulators
@@ -292,10 +313,9 @@ contract MonoswapV2Pair is IMonoswapV2Pair, MonoswapV2ERC20 {
         );
     }
 
-    function claimYield() external {
+    function claimYield(address receipient) external {
         require(msg.sender == factory, "MONOSWAPV2: FORBIDDEN");
-        address feeTo = IMonoswapV2Factory(factory).feeTo();
-        USDB.claim(feeTo, USDB.getClaimableAmount(address(this)));
-        WETH.claim(feeTo, WETH.getClaimableAmount(address(this)));
+        usdb.claim(receipient, usdb.getClaimableAmount(address(this)));
+        weth.claim(receipient, weth.getClaimableAmount(address(this)));
     }
 }
