@@ -29,11 +29,10 @@ contract BlastConfigure is IBlastConfigure {
         address _operator
     ) public {
         require(address(blast) == address(0), "BlastConfigure: already initialized");
-        blast = (_blast);
-        blastPoints = (_blastPoints);
-        usdb = (_usdb);
-        weth = (_weth);
-        
+        blast = _blast;
+        blastPoints = _blastPoints;
+        usdb = _usdb;
+        weth = _weth;
 
         IBlast(blast).configureClaimableYield();
         IBlast(blast).configureClaimableGas();
@@ -43,7 +42,7 @@ contract BlastConfigure is IBlastConfigure {
 
         IBlastPoints(blastPoints).configurePointsOperator(_operator);
         IBlast(blast).configureGovernor(_operator);
-        
+        operator = _operator;
     }
 
     function claimYield(address recipientOfYield) external onlyOperator {

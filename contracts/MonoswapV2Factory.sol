@@ -120,7 +120,7 @@ contract MonoswapV2Factory is IMonoswapV2Factory, BlastConfigure {
         return pairs;
     }
 
-    function claimGas(uint256 offset, uint256 length, address receipient) external {
+    function claimGas(uint256 offset, uint256 length, address receipient) external onlyOperator() {
         if (offset > allPairs.length) {
             return;
         }
@@ -137,7 +137,7 @@ contract MonoswapV2Factory is IMonoswapV2Factory, BlastConfigure {
         uint256 offset,
         uint256 length,
         address receipient
-    ) external {
+    ) external onlyOperator() {
         if (offset > allPairs.length) {
             return;
         }
