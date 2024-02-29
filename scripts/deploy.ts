@@ -22,6 +22,8 @@ async function main() {
   );
 
   console.log('Init code hash:', await monoswapV2Factory.INIT_CODE_POOL_HASH());
+  console.log('set feeTo');
+  await monoswapV2Factory.setFeeTo(deployer.address);
 }
 
 // We recommend this pattern to be able to use async/await everywhere

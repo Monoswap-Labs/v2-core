@@ -21,9 +21,8 @@ const config: HardhatUserConfig = {
     },
     // for mainnet
     blastMainnet: {
-      url: `https://rpc.ankr.com/blast/${process.env.NODE_API_KEY || ''}`,
+      url: `https://rpc.ankr.com/blast`,
       accounts: [process.env.BLAST_MAINNET_PRIVATE_KEY || ''],
-      gasPrice: 1000000000,
     },
     // for Sepolia testnet
     blastSepolia: {
